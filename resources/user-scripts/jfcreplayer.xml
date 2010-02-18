@@ -59,72 +59,76 @@
 		<fileset dir="${lib.dir}" includes="**/*.jar" />
 	</path>
 
-
-<target name="replayer-tests" description="run all the tests">
-
-	 <taskdef resource="net/sf/antcontrib/antcontrib.properties">
-	  <classpath>
-	   <pathelement location="ant-contrib-0.6.jar"/>
-	  </classpath>
-	 </taskdef>
-
-	<for list="${application.testcase-file}" param="atest">
-	 <sequential>
-		<echo message="${application.main-class}" />
-		<echo message="${application.efg-file}" />
-		<echo message="${application.testcase-dir}/@{atest}" />
-		<echo message="${application.gui-file}" />
-
-		<java classname="${replayer.launcher}" fork="true">
-
-			<!-- Ripper arguments-->
-			<arg value="-a" />
-			<arg value="${application.arguments}" />
-
-			<arg value="-c" />
-			<arg value="${application.main-class}" />
-
-			<arg value="-e" />
-			<arg value="${application.efg-file}" />
-
-			<arg value="-g" />
-			<arg value="${application.gui-file}" />
-
-			<arg value="-t" />
-			<arg value="${application.testcase-dir}/@{atest}" />
+	<target name="create-dirs" if="application.state-dir">
+		<mkdir dir="${application.state-dir}" />
+	</target>
+	
+	<target name="replayer-tests" description="run all the tests" depends="create-dirs">
 
 
-			<arg value="-gs" />
-			<arg value="${application.state-dir}/@{atest}.${application.state-file}" />
+		<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+			<classpath>
+				<pathelement location="ant-contrib-0.6.jar" />
+			</classpath>
+		</taskdef>
 
-			<arg value="-j" />
-			<arg value="${application.jvm-options}" />
+		<for list="${application.testcase-file}" param="atest">
+			<sequential>
+				<echo message="${application.main-class}" />
+				<echo message="${application.efg-file}" />
+				<echo message="${application.testcase-dir}/@{atest}" />
+				<echo message="${application.gui-file}" />
 
-			<arg value="-l" />
-			<arg value="${application.log-dir}/${application.log-file}" />
+				<java classname="${replayer.launcher}" fork="true">
 
-			<arg value="-i" />
-			<arg value="${replayer.initial-waiting-time}" />
+					<!-- Ripper arguments-->
+					<arg value="-a" />
+					<arg value="${application.arguments}" />
 
-			<arg value="-d" />
-			<arg value="${replayer.delay}" />
+					<arg value="-c" />
+					<arg value="${application.main-class}" />
+
+					<arg value="-e" />
+					<arg value="${application.efg-file}" />
+
+					<arg value="-g" />
+					<arg value="${application.gui-file}" />
+
+					<arg value="-t" />
+					<arg value="${application.testcase-dir}/@{atest}" />
 
 
-			<!-- - - - - - - - - - - - -
+					<arg value="-gs" />
+					<arg value="${application.state-dir}/@{atest}.${application.state-file}" />
+
+					<arg value="-j" />
+					<arg value="${application.jvm-options}" />
+
+					<arg value="-l" />
+					<arg value="${application.log-dir}/@{atest}.${application.log-file}" />
+
+					<arg value="-i" />
+					<arg value="${replayer.initial-waiting-time}" />
+
+					<arg value="-d" />
+					<arg value="${replayer.delay}" />
+
+
+					<!-- - - - - - - - - - - - -
 			Other arguments 
 			- - - - - - - - - - - - - - -->
-			<!-- <arg value="-Dlog4j.configuration=jar:file:${lib.dir}/jfcguiripper.jar!/resources/config" /> -->
+					<!-- <arg value="-Dlog4j.configuration=jar:file:${lib.dir}/jfcguiripper.jar!/resources/config" /> -->
 
-			<classpath>
-				<pathelement location="${basedir}" />
-				<pathelement location="${application.classpath}" />
-				<fileset dir="${lib.dir}" includes="*.jar" />
-				<pathelement location="${replayer.lib}" />
-			</classpath>
+					<classpath>
+						<pathelement location="${basedir}" />
+						<pathelement location="${application.classpath}" />
+						<fileset dir="${lib.dir}" includes="*.jar" />
+						<pathelement location="${replayer.lib}" />
+					</classpath>
 
-		</java>
-	 </sequential>
-         </for>
+				</java>
+			</sequential>
+		</for>
 	</target>
 
 	<!--
