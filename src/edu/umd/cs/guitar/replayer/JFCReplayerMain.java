@@ -30,36 +30,33 @@ import org.kohsuke.args4j.CmdLineParser;
  */
 public class JFCReplayerMain {
 
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
 
-        // Note: We don't actually use this configuration object
-        // we only use this object to initialize the static fields of
-        // JFCReplayerConfiguration
-        JFCReplayerConfiguration configuration = new JFCReplayerConfiguration();
-        CmdLineParser parser = new CmdLineParser(configuration);
-        JFCReplayer jfcReplayer = new JFCReplayer(configuration);
+		// Note: We don't actually use this configuration object
+		// we only use this object to initialize the static fields of
+		// JFCReplayerConfiguration
+		JFCReplayerConfiguration configuration = new JFCReplayerConfiguration();
+		CmdLineParser parser = new CmdLineParser(configuration);
+		JFCReplayer jfcReplayer = new JFCReplayer(configuration);
 
-        try {
-            parser.parseArgument(args);
-            jfcReplayer.execute();
-        } catch (CmdLineException e) {
-            System.err.println(e.getMessage());
-            System.err.println();
-            System.err
-                    .println("Usage: java [JVM options] "
-                            + JFCReplayerMain.class.getName()
-                            + " [Relayer options] \n");
-            System.err.println("where [Replayer options] include:");
-            System.err.println();
-            parser.printUsage(System.err);
-        }
-
-        // Enable System.exit()
-        System.setSecurityManager(null);
-        System.exit(0);
-    }
+		try {
+			parser.parseArgument(args);
+			jfcReplayer.execute();
+		} catch (CmdLineException e) {
+			System.err.println(e.getMessage());
+			System.err.println();
+			System.err
+					.println("Usage: java [JVM options] "
+							+ JFCReplayerMain.class.getName()
+							+ " [Relayer options] \n");
+			System.err.println("where [Replayer options] include:");
+			System.err.println();
+			parser.printUsage(System.err);
+		}
+		System.exit(0);
+	}
 
 }

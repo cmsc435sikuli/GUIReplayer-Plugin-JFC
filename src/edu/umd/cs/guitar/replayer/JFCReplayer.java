@@ -61,7 +61,6 @@ public class JFCReplayer {
     JFCReplayerConfiguration CONFIG;
 
     public void execute() throws CmdLineException {
-    	System.out.println("Feb 18 2010 Updated!!!!");
     	
         long nStartTime = System.currentTimeMillis();
         checkArgs();
