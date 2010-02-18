@@ -93,19 +93,19 @@ public class JFCReplayerMonitor extends GReplayerMonitor {
         // -------------------------------------
         // Disable System.exit() call by changing SecurityManager
 
-        oldSecurityManager = System.getSecurityManager();
-        final SecurityManager securityManager = new SecurityManager() {
-            public void checkExit(int status) {
-                throw new ApplicationTerminatedException(status);
-            }
-
-            public void checkPermission(Permission perm, Object context) {
-            }
-
-            public void checkPermission(Permission perm) {
-            }
-        };
-        System.setSecurityManager(securityManager);
+		oldSecurityManager = System.getSecurityManager();
+//		final SecurityManager securityManager = new SecurityManager() {
+//			public void checkExit(int status) {
+//				throw new ApplicationTerminatedException(status);
+//			}
+//
+//			public void checkPermission(Permission perm, Object context) {
+//			}
+//
+//			public void checkPermission(Permission perm) {
+//			}
+//		};
+//		System.setSecurityManager(securityManager);
     }
 
     /*

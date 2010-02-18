@@ -177,7 +177,7 @@
 	</target>
 	
 	<target name= "copy" if="filesToCopy">
-	<echo message= "${dist.dir}" />
+	<echo message= "dist dir: ${dist.dir}" />
 		<copy todir="${dist.dir}" flatten="true">			
 			<fileset dir="${basedir}/.." includes="${filesToCopy}" />			
 		</copy>		

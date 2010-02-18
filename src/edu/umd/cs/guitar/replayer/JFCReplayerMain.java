@@ -35,8 +35,6 @@ public class JFCReplayerMain {
      */
     public static void main(String[] args) {
 
-        System.out.println("Got here");
-
         // Note: We don't actually use this configuration object
         // we only use this object to initialize the static fields of
         // JFCReplayerConfiguration

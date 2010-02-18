@@ -57,10 +57,12 @@ import edu.umd.cs.guitar.util.GUITARLog;
  * @author <a href="mailto:baonn@cs.umd.edu"> Bao Nguyen </a>
  */
 public class JFCReplayer {
-
+	
     JFCReplayerConfiguration CONFIG;
 
     public void execute() throws CmdLineException {
+    	System.out.println("Feb 18 2010 Updated!!!!");
+    	
         long nStartTime = System.currentTimeMillis();
         checkArgs();
         setupEnv();
@@ -105,12 +107,6 @@ public class JFCReplayer {
 
             replayer.setMonitor(jMonitor);
             replayer.setTimeOut(JFCReplayerConfiguration.TESTCASE_TIMEOUT);
-
-            // try {
-            // replayer.execute();
-            // } catch (GException e) {
-            // GUITARLog.log.error("GUITAR Exception", e);
-            // }
 
             replayer.execute();
 
