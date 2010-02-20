@@ -97,7 +97,7 @@ public class JFCReplayerMonitor extends GReplayerMonitor {
 						GUITARLog.log.error("Uncaught exception", e);
 					}
 				});
-		
+
 		// -------------------------------------
 		// Disable System.exit() call by changing SecurityManager
 
@@ -301,9 +301,6 @@ public class JFCReplayerMonitor extends GReplayerMonitor {
 			application = new JFCApplication(
 					JFCReplayerConfiguration.MAIN_CLASS, URLs);
 
-			application = new JFCApplication(
-					JFCReplayerConfiguration.MAIN_CLASS, URLs);
-
 			String[] args;
 
 			if (JFCReplayerConfiguration.ARGUMENT_LIST != null)
@@ -320,11 +317,14 @@ public class JFCReplayerMonitor extends GReplayerMonitor {
 			try {
 				Thread.sleep(JFCReplayerConfiguration.INITIAL_WAITING_TIME);
 			} catch (InterruptedException e) {
+				GUITARLog.log.error(e);
 				throw new ApplicationConnectException();
 			}
 		} catch (MalformedURLException e) {
+			GUITARLog.log.error(e);
 			throw new ApplicationConnectException();
 		} catch (ClassNotFoundException e) {
+			GUITARLog.log.error(e);
 			throw new ApplicationConnectException();
 		}
 
