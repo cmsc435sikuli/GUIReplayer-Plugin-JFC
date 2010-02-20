@@ -31,6 +31,7 @@ import java.util.TimeZone;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.kohsuke.args4j.CmdLineException;
@@ -57,187 +58,188 @@ import edu.umd.cs.guitar.util.GUITARLog;
  * @author <a href="mailto:baonn@cs.umd.edu"> Bao Nguyen </a>
  */
 public class JFCReplayer {
-	
-    JFCReplayerConfiguration CONFIG;
 
-    public void execute() throws CmdLineException {
-    	
-        long nStartTime = System.currentTimeMillis();
-        checkArgs();
-        setupEnv();
+	JFCReplayerConfiguration CONFIG;
 
-        System.setProperty("file.name", JFCReplayerConfiguration.LOG_FILE);
-        // PropertyConfigurator.configure(JFCConstants.LOG4J_PROPERTIES_FILE);
-        URL logFile = this.getClass().getClassLoader().getResource(
-                JFCConstants.LOG4J_PROPERTIES_FILE);
-        PropertyConfigurator.configure(logFile);
+	public void execute() throws CmdLineException {
 
-        GUITARLog.log = Logger.getLogger(JFCReplayerMain.class.getSimpleName());
+		long nStartTime = System.currentTimeMillis();
+		checkArgs();
+		setupEnv();
 
-        printInfo();
+		System.setProperty("file.name", JFCReplayerConfiguration.LOG_FILE);
+		// PropertyConfigurator.configure(JFCConstants.LOG4J_PROPERTIES_FILE);
 
-        TestCase tc = (TestCase) IO.readObjFromFile(
-                JFCReplayerConfiguration.TESTCASE, TestCase.class);
+		URL logFile = this.getClass().getClassLoader().getResource(
+				JFCConstants.LOG4J_PROPERTIES_FILE);
+		PropertyConfigurator.configure(logFile);
 
-        Replayer replayer;
-        try {
+		GUITARLog.log = Logger.getLogger(JFCReplayerMain.class.getSimpleName());
+		// GUITARLog.log.setLevel(Level.OFF);
+		printInfo();
 
-            if (tc == null) {
-                GUITARLog.log.error("Test case not found");
-                throw new FileNotFoundException();
-            }
+		TestCase tc = (TestCase) IO.readObjFromFile(
+				JFCReplayerConfiguration.TESTCASE, TestCase.class);
 
-            replayer = new Replayer(tc, JFCReplayerConfiguration.GUI_FILE,
-                    JFCReplayerConfiguration.EFG_FILE);
-            GReplayerMonitor jMonitor = new JFCReplayerMonitor(
-                    JFCReplayerConfiguration.MAIN_CLASS);
+		Replayer replayer;
+		try {
 
-            // Add a timeout monitor
-            GTestMonitor timeoutMonitor = new TimeMonitor(
-                    JFCReplayerConfiguration.TESTSTEP_TIMEOUT,
-                    JFCReplayerConfiguration.TESTCASE_TIMEOUT);
-            replayer.addTestMonitor(timeoutMonitor);
+			if (tc == null) {
+				GUITARLog.log.error("Test case not found");
+				throw new FileNotFoundException();
+			}
 
-            // Add a GUI state record monitor
-            GTestMonitor stateMonitor = new StateMonitorFull(
-                    JFCReplayerConfiguration.GUI_STATE_FILE,
-                    JFCReplayerConfiguration.DELAY);
-            replayer.addTestMonitor(stateMonitor);
+			replayer = new Replayer(tc, JFCReplayerConfiguration.GUI_FILE,
+					JFCReplayerConfiguration.EFG_FILE);
+			GReplayerMonitor jMonitor = new JFCReplayerMonitor(
+					JFCReplayerConfiguration.MAIN_CLASS);
 
-            replayer.setMonitor(jMonitor);
-            replayer.setTimeOut(JFCReplayerConfiguration.TESTCASE_TIMEOUT);
+			// Add a timeout monitor
+			GTestMonitor timeoutMonitor = new TimeMonitor(
+					JFCReplayerConfiguration.TESTSTEP_TIMEOUT,
+					JFCReplayerConfiguration.TESTCASE_TIMEOUT);
+			replayer.addTestMonitor(timeoutMonitor);
 
-            replayer.execute();
+			// Add a GUI state record monitor
+			GTestMonitor stateMonitor = new StateMonitorFull(
+					JFCReplayerConfiguration.GUI_STATE_FILE,
+					JFCReplayerConfiguration.DELAY);
+			replayer.addTestMonitor(stateMonitor);
 
-        } catch (ParserConfigurationException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        } catch (SAXException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        } catch (IOException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
-        GUITARLog.log.info("GUI state file: "
-                + JFCReplayerConfiguration.GUI_STATE_FILE);
+			replayer.setMonitor(jMonitor);
+			replayer.setTimeOut(JFCReplayerConfiguration.TESTCASE_TIMEOUT);
 
-        // ------------------
-        // Elapsed time:
-        long nEndTime = System.currentTimeMillis();
-        long nDuration = nEndTime - nStartTime;
-        DateFormat df = new SimpleDateFormat("HH : mm : ss: SS");
-        df.setTimeZone(TimeZone.getTimeZone("GMT"));
-        GUITARLog.log.info("Time Elapsed: " + df.format(nDuration));
-    }
+			replayer.execute();
 
-    /**
+		} catch (ParserConfigurationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (SAXException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (Exception e) {
+			GUITARLog.log.error("Generaal Exception thrown", e);
+		}
+
+		// ------------------
+		// Elapsed time:
+		long nEndTime = System.currentTimeMillis();
+		long nDuration = nEndTime - nStartTime;
+		DateFormat df = new SimpleDateFormat("HH : mm : ss: SS");
+		df.setTimeZone(TimeZone.getTimeZone("GMT"));
+		GUITARLog.log.info("Time Elapsed: " + df.format(nDuration));
+	}
+
+	/**
      * 
      */
-    private void printInfo() {
-        GUITARLog.log.info("Testcase: " + JFCReplayerConfiguration.TESTCASE);
-    }
+	private void printInfo() {
+		GUITARLog.log.info("Testcase: " + JFCReplayerConfiguration.TESTCASE);
+	}
 
-    /**
-     * 
-     * Check for command-line arguments
-     * 
-     * @throws CmdLineException
+	/**
+	 * 
+	 * Check for command-line arguments
+	 * 
+	 * @throws CmdLineException
+	 * 
+	 */
+	private void checkArgs() throws CmdLineException {
+		// Check argument
+		if (JFCReplayerConfiguration.HELP) {
+			throw new CmdLineException("");
+		}
+
+		boolean isPrintUsage = false;
+
+		if (JFCReplayerConfiguration.MAIN_CLASS == null) {
+			System.err.println("missing '-c' argument");
+			isPrintUsage = true;
+		}
+
+		if (JFCReplayerConfiguration.GUI_FILE == null) {
+			System.err.println("missing '-g' argument");
+			isPrintUsage = true;
+		}
+
+		if (JFCReplayerConfiguration.EFG_FILE == null) {
+			System.err.println("missing '-e' argument");
+			isPrintUsage = true;
+		}
+
+		if (JFCReplayerConfiguration.TESTCASE == null) {
+			System.err.println("missing '-t' argument");
+			isPrintUsage = true;
+		}
+
+		if (isPrintUsage)
+			throw new CmdLineException("");
+
+	}
+
+	/**
+	 * @param configuration
+	 */
+	public JFCReplayer(JFCReplayerConfiguration configuration) {
+		super();
+		this.CONFIG = configuration;
+	}
+
+	/**
      * 
      */
-    private void checkArgs() throws CmdLineException {
-        // Check argument
-        if (JFCReplayerConfiguration.HELP) {
-            throw new CmdLineException("");
-        }
+	private void setupEnv() {
+		// --------------------------
+		// Terminal list
+		// Try to find absolute path first then relative path
 
-        boolean isPrintUsage = false;
+		Configuration conf;
 
-        if (JFCReplayerConfiguration.MAIN_CLASS == null) {
-            System.err.println("missing '-c' argument");
-            isPrintUsage = true;
-        }
+		conf = (Configuration) IO.readObjFromFile(
+				JFCReplayerConfiguration.CONFIG_FILE, Configuration.class);
+		if (conf == null) {
+			InputStream in = getClass().getClassLoader().getResourceAsStream(
+					JFCReplayerConfiguration.CONFIG_FILE);
+			conf = (Configuration) IO.readObjFromFile(in, Configuration.class);
+		}
 
-        if (JFCReplayerConfiguration.GUI_FILE == null) {
-            System.err.println("missing '-g' argument");
-            isPrintUsage = true;
-        }
+		List<FullComponentType> cTerminalList = conf.getTerminalComponents()
+				.getFullComponent();
 
-        if (JFCReplayerConfiguration.EFG_FILE == null) {
-            System.err.println("missing '-e' argument");
-            isPrintUsage = true;
-        }
+		for (FullComponentType cTermWidget : cTerminalList) {
+			ComponentType component = cTermWidget.getComponent();
+			AttributesType attributes = component.getAttributes();
+			if (attributes != null)
+				JFCConstants.sTerminalWidgetSignature
+						.add(new AttributesTypeWrapper(component
+								.getAttributes()));
+		}
 
-        if (JFCReplayerConfiguration.TESTCASE == null) {
-            System.err.println("missing '-t' argument");
-            isPrintUsage = true;
-        }
+		List<FullComponentType> lIgnoredComps = new ArrayList<FullComponentType>();
+		List<String> ignoredWindow = new ArrayList<String>();
 
-        if (isPrintUsage)
-            throw new CmdLineException("");
+		ComponentListType ignoredAll = conf.getIgnoredComponents();
 
-    }
+		if (ignoredAll != null)
+			for (FullComponentType fullComp : ignoredAll.getFullComponent()) {
+				ComponentType comp = fullComp.getComponent();
 
-    /**
-     * @param configuration
-     */
-    public JFCReplayer(JFCReplayerConfiguration configuration) {
-        super();
-        this.CONFIG = configuration;
-    }
+				// TODO: Shortcut here
+				if (comp == null) {
+					ComponentType win = fullComp.getWindow();
+					ComponentTypeWrapper winAdapter = new ComponentTypeWrapper(
+							win);
+					String ID = winAdapter
+							.getFirstValueByName(GUITARConstants.ID_TAG_NAME);
+					if (ID != null)
+						JFCConstants.sIgnoredWins.add(ID);
 
-    /**
-     * 
-     */
-    private void setupEnv() {
-        // --------------------------
-        // Terminal list
-        // Try to find absolute path first then relative path
-
-        Configuration conf;
-
-        conf = (Configuration) IO.readObjFromFile(
-                JFCReplayerConfiguration.CONFIG_FILE, Configuration.class);
-        if (conf == null) {
-            InputStream in = getClass().getClassLoader().getResourceAsStream(
-                    JFCReplayerConfiguration.CONFIG_FILE);
-            conf = (Configuration) IO.readObjFromFile(in, Configuration.class);
-        }
-
-        List<FullComponentType> cTerminalList = conf.getTerminalComponents()
-                .getFullComponent();
-
-        for (FullComponentType cTermWidget : cTerminalList) {
-            ComponentType component = cTermWidget.getComponent();
-            AttributesType attributes = component.getAttributes();
-            if (attributes != null)
-                JFCConstants.sTerminalWidgetSignature
-                        .add(new AttributesTypeWrapper(component
-                                .getAttributes()));
-        }
-
-        List<FullComponentType> lIgnoredComps = new ArrayList<FullComponentType>();
-        List<String> ignoredWindow = new ArrayList<String>();
-
-        ComponentListType ignoredAll = conf.getIgnoredComponents();
-
-        if (ignoredAll != null)
-            for (FullComponentType fullComp : ignoredAll.getFullComponent()) {
-                ComponentType comp = fullComp.getComponent();
-
-                // TODO: Shortcut here
-                if (comp == null) {
-                    ComponentType win = fullComp.getWindow();
-                    ComponentTypeWrapper winAdapter = new ComponentTypeWrapper(
-                            win);
-                    String ID = winAdapter
-                            .getFirstValueByName(GUITARConstants.ID_TAG_NAME);
-                    if (ID != null)
-                        JFCConstants.sIgnoredWins.add(ID);
-
-                } else
-                    lIgnoredComps.add(fullComp);
-            }
-    }
+				} else
+					lIgnoredComps.add(fullComp);
+			}
+	}
 
 }

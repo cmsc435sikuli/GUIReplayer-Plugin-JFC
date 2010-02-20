@@ -88,8 +88,16 @@ public class JFCReplayerMonitor extends GReplayerMonitor {
 	 */
 	@Override
 	public void setUp() {
-		System.out.println("Setting up JFCReplayer...");
-
+		GUITARLog.log.info("Setting up JFCReplayer...");
+		// -------------------------------------
+		// Add handler for all uncaught exceptions
+		Thread
+				.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+					public void uncaughtException(Thread t, Throwable e) {
+						GUITARLog.log.error("Uncaught exception", e);
+					}
+				});
+		
 		// -------------------------------------
 		// Disable System.exit() call by changing SecurityManager
 
@@ -112,6 +120,7 @@ public class JFCReplayerMonitor extends GReplayerMonitor {
 			}
 		};
 		System.setSecurityManager(securityManager);
+
 	}
 
 	/*
@@ -178,7 +187,7 @@ public class JFCReplayerMonitor extends GReplayerMonitor {
 			try {
 				Thread.sleep(DELAY_STEP);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				GUITARLog.log.error(e);
 			}
 
 		}
@@ -212,7 +221,7 @@ public class JFCReplayerMonitor extends GReplayerMonitor {
 			try {
 				Thread.sleep(DELAY_STEP);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				GUITARLog.log.error(e);
 			}
 		}
 		return retGXWindow;
@@ -307,22 +316,16 @@ public class JFCReplayerMonitor extends GReplayerMonitor {
 
 			GUITARLog.log.info("Initial waiting for "
 					+ JFCReplayerConfiguration.INITIAL_WAITING_TIME + "ms");
+
 			try {
 				Thread.sleep(JFCReplayerConfiguration.INITIAL_WAITING_TIME);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new ApplicationConnectException();
 			}
-
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ApplicationConnectException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new ApplicationConnectException();
+		} catch (ClassNotFoundException e) {
+			throw new ApplicationConnectException();
 		}
 
 	}
