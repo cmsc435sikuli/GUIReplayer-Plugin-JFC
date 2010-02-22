@@ -131,6 +131,8 @@ public class JFCReplayer {
 		DateFormat df = new SimpleDateFormat("HH : mm : ss: SS");
 		df.setTimeZone(TimeZone.getTimeZone("GMT"));
 		GUITARLog.log.info("Time Elapsed: " + df.format(nDuration));
+		
+		printInfo();
 	}
 
 	/**
