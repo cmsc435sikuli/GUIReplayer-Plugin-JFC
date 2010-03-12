@@ -1,4 +1,4 @@
-<project name="unit-tests" default="help" basedir="..">
+<project name="unit-tests" default="help" basedir=".">
 
   <!-- Environment Variables -->
 
@@ -7,7 +7,7 @@
   <property name="guitar.version" value="3.0" />
 
   <property name="ant.dir" value="${shared.lib.dir}/${ant.lib.dir}" />
-  <property name="test.dir" value="tests" />
+  <property name="test.dir" value="." />
   <property name="cobertura.dir" value="${shared.lib.dir}/cobertura" />
   <property name="report.dir" value="${test.dir}/reports" />
   <property name="coverage.dir" value="${test.dir}/coverage" />
@@ -73,7 +73,7 @@
   <!-- Build the GUIRipper -->
 
   <target description="Build dependencies" name="build-deps">
-    <ant antfile="install/build.xml" target="dist" dir="${basedir}" inheritAll="false">
+    <ant antfile="../install/build.xml" target="dist" dir="${basedir}" inheritAll="false">
       <property name="debug" value="true" />
       <property file="build.properties" />
     </ant>
@@ -88,7 +88,8 @@
     <delete file="${coverage.dir}/cobertura.ser" />
 
     <cobertura-instrument datafile="${coverage.dir}/cobertura.ser" todir="${jar.dir}" >
-      <fileset dir="${dist.dir}/${dist.lib.dir}">
+	<!-- <fileset dir="${dist.dir}/${dist.lib.dir}"> -->
+	<fileset dir="${dist.lib.dir}">
 	<include name="${module}.jar" />
       </fileset>
     </cobertura-instrument>
@@ -99,7 +100,8 @@
   <target description="Build the unit tests" name="build-tests" depends="build-deps">
     <javac srcdir="${test.dir}" destdir="${test.dir}" debug="${debug}" deprecation="${deprecation}"  debuglevel="vars,lines,source">
       <classpath>
-	<fileset dir="${shared.lib.dir}/guitarlib" includes="**/*.jar" erroronmissingdir="false" />
+	<!--<fileset dir="${shared.lib.dir}/guitarlib" -->
+	<fileset dir="${dist.lib.dir}"	includes="**/*.jar" erroronmissingdir="false" />
 	<path refid="dist.lib.path.ref" />
 	<path refid="junit.lib" />
       </classpath>
@@ -132,7 +134,8 @@
       <classpath>
 	<pathelement location="${jar.dir}/${module}-unit-tests.jar" />
 	<pathelement location="${shared.lib.dir}/log4j-1.2.15.jar" />
-	<pathelement location="${shared.lib.dir}/guitarlib/guitarmodel.jar" />
+	<!--<pathelement location="${shared.lib.dir}/guitarlib/guitarmodel.jar" />-->
+	<pathelement location="{$jar.dir}/GUITARModel-Core.jar" />
       </classpath>
 
       <classpath>
@@ -196,7 +199,7 @@
   <!-- Clean -->
 
   <target description="Clean the build" name="clean">
-    <ant antfile="install/build.xml" target="clean" dir="${basedir}" inheritAll="false" />
+    <ant antfile="../install/build.xml" target="clean" dir="${basedir}" inheritAll="false" />
 
     <delete dir="${report.dir}" />
     <delete dir="${coverage.dir}" />

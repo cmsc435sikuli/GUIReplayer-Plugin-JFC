@@ -19,6 +19,7 @@
  */
 package edu.umd.cs.guitar.replayer.monitor;
 
+import edu.umd.cs.guitar.exception.GException;
 import edu.umd.cs.guitar.replayer.Replayer;
 import edu.umd.cs.guitar.util.Debugger;
 
@@ -38,6 +39,10 @@ public class JFCDebugMonitor extends GTestMonitor {
      * edu.umd.cs.guitar.replayer.monitor.GTestMonitor#afterStep(edu.umd.cs.
      * guitar.replayer.monitor.TestStepEventArgs)
      */
+    @Override
+    public void exceptionHandler(GException exc) {
+    }
+
     @Override
     public void afterStep(TestStepEndEventArgs step) {
         // Debugger.pause("Please press enter to continue ...");

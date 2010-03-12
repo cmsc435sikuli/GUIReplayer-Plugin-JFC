@@ -209,7 +209,7 @@ public class JFCReplayerMonitor extends GReplayerMonitor {
 
         GWindow gWindow = new JFCXWindow(parent);
 
-        if (sWindowID.equals(gWindow.getFullID())) {
+        if (sWindowID.equals(gWindow.getTitle())) {
             return parent;
         }
 
