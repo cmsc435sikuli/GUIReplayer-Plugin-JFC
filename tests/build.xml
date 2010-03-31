@@ -133,9 +133,11 @@
       
       <classpath>
 	<pathelement location="${jar.dir}/${module}-unit-tests.jar" />
-	<pathelement location="${shared.lib.dir}/log4j-1.2.15.jar" />
+	<pathelement location="${shared.lib.dir}/args4j-2.0.10.jar" />
+        <pathelement location="${shared.lib.dir}/log4j-1.2.15.jar" />
 	<!--<pathelement location="${shared.lib.dir}/guitarlib/guitarmodel.jar" />-->
-	<pathelement location="{$jar.dir}/GUITARModel-Core.jar" />
+        <pathelement location="${dist.lib.dir}/GUITARModel-Core.jar" />
+        <pathelement location="${dist.lib.dir}/GUIReplayer-Core.jar" />
       </classpath>
 
       <classpath>
