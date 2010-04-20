@@ -94,10 +94,10 @@
     </cobertura-instrument>
   </target>
 
-  <!-- Build the Unit Tests --><!--Anika: Change the srcdir to be the real code-->
+  <!-- Build the Unit Tests -->
 
   <target description="Build the unit tests" name="build-tests" depends="build-deps">
-    <javac srcdir="../src" destdir="${test.dir}" debug="${debug}" deprecation="${deprecation}"  debuglevel="vars,lines,source">
+    <javac srcdir="${test.dir}" destdir="${test.dir}" debug="${debug}" deprecation="${deprecation}"  debuglevel="vars,lines,source">
       <classpath>
 	<!--<fileset dir="${shared.lib.dir}/guitarlib" -->
 	<fileset dir="${dist.lib.dir}"	includes="**/*.jar" erroronmissingdir="false" />
@@ -113,7 +113,8 @@
     <mkdir dir="${jar.dir}" />
 
     <jar jarfile="${jar.dir}/${module}-unit-tests.jar" update="true">
-      <fileset dir="${test.dir}" includes="**/*.class" />
+      <fileset dir="../src" includes="**/*.class" />
+	<fileset dir="." includes="checkboxesDemo.class"/>
     </jar>
   </target>
 
