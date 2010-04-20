@@ -113,7 +113,7 @@
     <mkdir dir="${jar.dir}" />
 
     <jar jarfile="${jar.dir}/${module}-unit-tests.jar" update="true">
-      <fileset dir="../src" includes="**/*.class" />
+      <fileset dir="." includes="**/*.class" />
 	<fileset dir="." includes="checkboxesDemo.class"/>
     </jar>
   </target>
