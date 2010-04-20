@@ -1,15 +1,13 @@
 package edu.umd.cs.guitar.replayer;
 import org.kohsuke.args4j.CmdLineException;
-import java.util.*;
 import java.io.File;
 import junit.framework.*;
 
 public class JFCReplayerTest extends TestCase{
 	
-	//Test #1: throwing CmdLineException
+	//Test #1: throwing CmdLineException - these are wrong. check test 2.
 	
 	public void test_execute1(){
-		Exception cmdLineExc = null;
 		Boolean exceptionCaught = false;
 		JFCReplayerConfiguration incompleteConfig = new JFCReplayerConfiguration();
 		JFCReplayer testReplayer = new JFCReplayer(incompleteConfig);
@@ -18,7 +16,6 @@ public class JFCReplayerTest extends TestCase{
 		try{
 			testReplayer.execute();
 		}catch (CmdLineException e) {
-			cmdLineExc = e;
 			exceptionCaught=true;
 		}
 		//assert
@@ -30,17 +27,63 @@ public class JFCReplayerTest extends TestCase{
 	{
 		JFCReplayerConfiguration newConfig = new JFCReplayerConfiguration();
 		
+		//Need to set up:TESTCASE, GUI_FILE, EFG_FILE, MAIN_CLASS
+		JFCReplayerConfiguration.MAIN_CLASS = "checkboxesDemo";
+		JFCReplayerConfiguration.CONFIG_FILE = "configuration.xml";
+		JFCReplayerConfiguration.GUI_FILE = "checkboxesDemo.GUI.xml";
+		JFCReplayerConfiguration.EFG_FILE = "checkboxesDemo.EFG.xml";
+		
+
+		JFCReplayerConfiguration.TESTCASE = "t_e7_e7.tst";
+		
+		JFCReplayer replayerTest = new JFCReplayer(newConfig);
+		Exception cmdLineExc = null;
+		
+		try{
+			replayerTest.execute();;
+		}catch(CmdLineException e){
+			cmdLineExc = e;
+      }
+		assertNull(cmdLineExc);
+	}
+
+	//Test #2: correct input-pause
+	public void test_execute2_pause()
+	{
+		JFCReplayerConfiguration newConfig = new JFCReplayerConfiguration();
 		
 		//Need to set up:TESTCASE, GUI_FILE, EFG_FILE, MAIN_CLASS
-		JFCReplayerConfiguration.CONFIG_FILE = "JFCReplayer"+File.separator+"tests"+File.separator+"inputs"+File.separator
-			+"resources"+File.separator+"config"+File.separator+"configuration.xml";
 		JFCReplayerConfiguration.MAIN_CLASS = "checkboxesDemo";
-		JFCReplayerConfiguration.GUI_FILE = "JFCReplayer"+File.separator
-			+"tests"+File.separator+"inputs"+File.separator+"checkboxesDemo"+File.separator+"checkboxesDemo.GUI.xml";
-		JFCReplayerConfiguration.EFG_FILE = "JFCReplayer"+File.separator
-			+"tests"+File.separator+"inputs"+File.separator+"checkboxesDemo"+File.separator+"checkboxesDemo.EFG.xml";
-		JFCReplayerConfiguration.TESTCASE = "JFCReplayer"+File.separator+"tests"+File.separator+"inputs"+File.separator
-    		+"checkboxesDemo"+File.separator+"testcases"+File.separator+"t1.tst";
+		JFCReplayerConfiguration.CONFIG_FILE = "configuration.xml";
+		JFCReplayerConfiguration.GUI_FILE = "checkboxesDemo.GUI.xml";
+		JFCReplayerConfiguration.EFG_FILE = "checkboxesDemo.EFG.xml";
+		
+		JFCReplayerConfiguration.TESTCASE = "t_e7_e7.tst";
+		
+		JFCReplayerConfiguration.PAUSE = true;
+		
+		JFCReplayer replayerTest = new JFCReplayer(newConfig);
+		Exception cmdLineExc = null;
+		
+		try{
+			replayerTest.execute();;
+		}catch(CmdLineException e){
+			cmdLineExc = e;
+      }
+		assertNull(cmdLineExc);
+	}
+
+	
+	public void test_execute3(){
+		JFCReplayerConfiguration newConfig = new JFCReplayerConfiguration();
+		
+		//Need to set up:TESTCASE, GUI_FILE, EFG_FILE, MAIN_CLASS
+		JFCReplayerConfiguration.MAIN_CLASS = "checkboxesDemo";
+		JFCReplayerConfiguration.CONFIG_FILE = "configuration.xml";
+		JFCReplayerConfiguration.GUI_FILE = "checkboxesDemo.GUI.xml";
+		JFCReplayerConfiguration.EFG_FILE = "checkboxesDemo.EFG.xml";
+		
+				JFCReplayerConfiguration.TESTCASE=null;
 
 		JFCReplayer replayerTest = new JFCReplayer(newConfig);
 		Exception cmdLineExc = null;
@@ -49,42 +92,7 @@ public class JFCReplayerTest extends TestCase{
 			replayerTest.execute();;
 		}catch(CmdLineException e){
 			cmdLineExc = e;
-            System.err.println(e.getMessage());
-            System.err.println();
-            System.err.println("Usage: java [JVM options] "+ JFCReplayerMain.class.getName() + " [Relayer options] \n");
-            System.err.println("where [Replayer options] include:");
-            System.err.println();
-        }
-		assertNull(cmdLineExc);
-	}
-	
-	public void test_execute3(){
-		JFCReplayerConfiguration newConfig = new JFCReplayerConfiguration();
-		
-		
-		//Need to set up:TESTCASE, GUI_FILE, EFG_FILE, MAIN_CLASS
-		JFCReplayerConfiguration.CONFIG_FILE = "JFCReplayer"+File.separator+"tests"+File.separator+"inputs"+File.separator
-			+"resources"+File.separator+"config"+File.separator+"configuration.xml";
-		JFCReplayerConfiguration.MAIN_CLASS = "checkboxesDemo";
-		JFCReplayerConfiguration.GUI_FILE = "JFCReplayer"+File.separator
-			+"tests"+File.separator+"inputs"+File.separator+"checkboxesDemo"+File.separator+"checkboxesDemo.GUI.xml";
-		JFCReplayerConfiguration.EFG_FILE = "JFCReplayer"+File.separator
-			+"tests"+File.separator+"inputs"+File.separator+"checkboxesDemo"+File.separator+"checkboxesDemo.EFG.xml";
-		JFCReplayerConfiguration.TESTCASE=null;
-		
-		JFCReplayer replayerTest = new JFCReplayer(newConfig);
-		Exception cmdLineExc = null;
-		
-		try{
-			replayerTest.execute();;
-		}catch(CmdLineException e){
-			cmdLineExc = e;
-            System.err.println(e.getMessage());
-            System.err.println();
-            System.err.println("Usage: java [JVM options] "+ JFCReplayerMain.class.getName() + " [Relayer options] \n");
-            System.err.println("where [Replayer options] include:");
-            System.err.println();
-        }
+     }
 		assertNotNull(cmdLineExc);
 	}
 	
@@ -92,14 +100,13 @@ public class JFCReplayerTest extends TestCase{
 		JFCReplayerConfiguration newConfig = new JFCReplayerConfiguration();
 		
 		
+		
 		//Need to set up:TESTCASE, GUI_FILE, EFG_FILE, MAIN_CLASS
-		JFCReplayerConfiguration.CONFIG_FILE = "JFCReplayer"+File.separator+"tests"+File.separator+"inputs"+File.separator
-			+"resources"+File.separator+"config"+File.separator+"configuration.xml";
 		JFCReplayerConfiguration.MAIN_CLASS = "checkboxesDemo";
-		JFCReplayerConfiguration.GUI_FILE = "JFCReplayer"+File.separator
-			+"tests"+File.separator+"inputs"+File.separator+"checkboxesDemo"+File.separator+"checkboxesDemo.GUI.xml";
-		JFCReplayerConfiguration.EFG_FILE = "JFCReplayer"+File.separator
-			+"tests"+File.separator+"inputs"+File.separator+"checkboxesDemo"+File.separator+"checkboxesDemo.EFG.xml";
+		JFCReplayerConfiguration.CONFIG_FILE = "configuration.xml";
+		JFCReplayerConfiguration.GUI_FILE = "checkboxesDemo.GUI.xml";
+		JFCReplayerConfiguration.EFG_FILE = "checkboxesDemo.EFG.xml";
+		
 		JFCReplayerConfiguration.HELP=true;
 		
 		JFCReplayer replayerTest = new JFCReplayer(newConfig);
@@ -109,12 +116,7 @@ public class JFCReplayerTest extends TestCase{
 			replayerTest.execute();;
 		}catch(CmdLineException e){
 			cmdLineExc = e;
-            System.err.println(e.getMessage());
-            System.err.println();
-            System.err.println("Usage: java [JVM options] "+ JFCReplayerMain.class.getName() + " [Relayer options] \n");
-            System.err.println("where [Replayer options] include:");
-            System.err.println();
-        }
+      }
 		assertNotNull(cmdLineExc);
 	}
 	
