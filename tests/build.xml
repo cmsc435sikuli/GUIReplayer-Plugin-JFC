@@ -70,7 +70,7 @@
 
   <!-- TARGETS -->
 
-  <!-- Build the GUIRipper -->
+  <!-- Build the GUIReplayer -->
 
   <target description="Build dependencies" name="build-deps">
     <ant antfile="../install/build.xml" target="dist" dir="${basedir}" inheritAll="false">
@@ -79,26 +79,25 @@
     </ant>
   </target>
 
-  <!-- Instrument the GUIRipper Classes -->
+  <!-- Instrument the GUIReplayer Classes -->
 
-  <target description="Instrument the GUIRipper Classes" name="instrument" depends="build-deps">
+  <target description="Instrument the GUIReplayer Classes" name="instrument" depends="build-deps">
     <mkdir dir="${jar.dir}" />
     <mkdir dir="${coverage.dir}" />
 
     <delete file="${coverage.dir}/cobertura.ser" />
 
     <cobertura-instrument datafile="${coverage.dir}/cobertura.ser" todir="${jar.dir}" >
-	<!-- <fileset dir="${dist.dir}/${dist.lib.dir}"> -->
 	<fileset dir="${dist.lib.dir}">
 	<include name="${module}.jar" />
       </fileset>
     </cobertura-instrument>
   </target>
 
-  <!-- Build the Unit Tests -->
+  <!-- Build the Unit Tests --><!--Anika: Change the srcdir to be the real code-->
 
   <target description="Build the unit tests" name="build-tests" depends="build-deps">
-    <javac srcdir="${test.dir}" destdir="${test.dir}" debug="${debug}" deprecation="${deprecation}"  debuglevel="vars,lines,source">
+    <javac srcdir="../src" destdir="${test.dir}" debug="${debug}" deprecation="${deprecation}"  debuglevel="vars,lines,source">
       <classpath>
 	<!--<fileset dir="${shared.lib.dir}/guitarlib" -->
 	<fileset dir="${dist.lib.dir}"	includes="**/*.jar" erroronmissingdir="false" />
@@ -135,9 +134,12 @@
 	<pathelement location="${jar.dir}/${module}-unit-tests.jar" />
 	<pathelement location="${shared.lib.dir}/args4j-2.0.10.jar" />
         <pathelement location="${shared.lib.dir}/log4j-1.2.15.jar" />
-	<!--<pathelement location="${shared.lib.dir}/guitarlib/guitarmodel.jar" />-->
         <pathelement location="${dist.lib.dir}/GUITARModel-Core.jar" />
         <pathelement location="${dist.lib.dir}/GUIReplayer-Core.jar" />
+	<pathelement location="${dist.lib.dir}/GUITARModel-Plugin-JFC.jar"/>
+	<pathelement location="${dist.lib.dir}/GUIReplayer-Plugin-JFC.jar"/>
+	<pathelement location="${dist.lib.dir}/jemmy.jar"/>
+
       </classpath>
 
       <classpath>
@@ -149,7 +151,7 @@
 
       <batchtest todir="${report.dir}" >
 	<fileset dir="${test.dir}">
-	  <include name="**/*.java" />
+	  <include name="**/*Test.java" />
 	</fileset>
       </batchtest>
     </junit>
