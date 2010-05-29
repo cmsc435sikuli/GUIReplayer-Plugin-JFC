@@ -33,11 +33,12 @@ import edu.umd.cs.guitar.util.Util;
  * @author <a href="mailto:baonn@cs.umd.edu"> Bao Nguyen </a>
  */
 public class JFCReplayerConfiguration extends GReplayerConfiguration {
-	
-    @Option(name = "-cf", usage = "Configure file for the gui recorder to recognize the terminal widgets", aliases = "--configure-file")
-    public static String CONFIG_FILE = //"resources" + File.separator + "config"
-           // + File.separator + 
-            "configuration.xml";
+
+	@Option(name = "-cf", usage = "Configure file for the gui recorder to recognize the terminal widgets", aliases = "--configure-file")
+	public static String CONFIG_FILE = // "resources" + File.separator +
+	// "config"
+	// + File.separator +
+	"configuration.xml";
 
 	// GUITAR runtime parameters
 	@Option(name = "-g", usage = "<REQUIRED> GUI file path", aliases = "--gui-file")
@@ -82,4 +83,16 @@ public class JFCReplayerConfiguration extends GReplayerConfiguration {
 
 	@Option(name = "-p", usage = "Pause after each step", aliases = "--pause")
 	static boolean PAUSE = false;
+
+	// Cobertura Coverage collection
+	@Option(name = "-cd", usage = "Cobertura coverage output dir", aliases = "--coverage-dir")
+	static String COVERAGE_DIR = null;
+
+	// @Option(name = "-cm", usage = "Cobertura coverage main file ", aliases =
+	// "--coverage-main")
+	// static String COVERAGE_MAIN_FILE = null;
+
+	@Option(name = "-cc", usage = "Cobertura coverage clean file ", aliases = "--coverage-clean")
+	static String COVERAGE_CLEAN_FILE = null;
+
 }

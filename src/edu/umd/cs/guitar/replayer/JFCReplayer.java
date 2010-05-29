@@ -36,6 +36,7 @@ import org.apache.log4j.PropertyConfigurator;
 import org.kohsuke.args4j.CmdLineException;
 import org.xml.sax.SAXException;
 
+import edu.umd.cs.guitar.exception.GException;
 import edu.umd.cs.guitar.model.GUITARConstants;
 import edu.umd.cs.guitar.model.IO;
 import edu.umd.cs.guitar.model.JFCConstants;
@@ -47,6 +48,7 @@ import edu.umd.cs.guitar.model.data.FullComponentType;
 import edu.umd.cs.guitar.model.data.TestCase;
 import edu.umd.cs.guitar.model.wrapper.AttributesTypeWrapper;
 import edu.umd.cs.guitar.model.wrapper.ComponentTypeWrapper;
+import edu.umd.cs.guitar.replayer.monitor.CoberturaCoverageMonitor;
 import edu.umd.cs.guitar.replayer.monitor.GTestMonitor;
 import edu.umd.cs.guitar.replayer.monitor.PauseMonitor;
 import edu.umd.cs.guitar.replayer.monitor.StateMonitorFull;
@@ -80,8 +82,6 @@ public class JFCReplayer {
 		TestCase tc = (TestCase) IO.readObjFromFile(
 				JFCReplayerConfiguration.TESTCASE, TestCase.class);
 
-		
-		
 		Replayer replayer;
 		try {
 
@@ -95,7 +95,6 @@ public class JFCReplayer {
 			GReplayerMonitor jMonitor = new JFCReplayerMonitor(
 					JFCReplayerConfiguration.MAIN_CLASS);
 
-			
 			// Add a GUI state record monitor
 			GTestMonitor stateMonitor = new StateMonitorFull(
 					JFCReplayerConfiguration.GUI_STATE_FILE,
@@ -114,14 +113,27 @@ public class JFCReplayer {
 				replayer.addTestMonitor(timeoutMonitor);
 			}
 
-//			// Add Debug monitor
-//			GTestMonitor debugMonitor = new JFCDebugMonitor();
-//			replayer.addTestMonitor(debugMonitor);
+			// Add a Cobertura code coverage collector
+			boolean isMeasureCoverage = (JFCReplayerConfiguration.COVERAGE_DIR != null && JFCReplayerConfiguration.COVERAGE_CLEAN_FILE != null);
+
+			if (isMeasureCoverage) {
+				GTestMonitor coverageMonitor = new CoberturaCoverageMonitor(
+						JFCReplayerConfiguration.COVERAGE_CLEAN_FILE,
+						JFCReplayerConfiguration.COVERAGE_DIR);
+				replayer.addTestMonitor(coverageMonitor);
+
+			}
+
+			// // Add Debug monitor
+			// GTestMonitor debugMonitor = new JFCDebugMonitor();
+			// replayer.addTestMonitor(debugMonitor);
 
 			replayer.setMonitor(jMonitor);
 			replayer.setTimeOut(JFCReplayerConfiguration.TESTCASE_TIMEOUT);
 
 			replayer.execute();
+			
+			GUITARLog.log.info("NORMALLY TERMINATED");
 
 		} catch (ParserConfigurationException e1) {
 			// TODO Auto-generated catch block
@@ -132,6 +144,10 @@ public class JFCReplayer {
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+
+		} catch (GException e) {
+			GUITARLog.log.error("GUITAR Exception thrown", e);
+
 		} catch (Exception e) {
 			GUITARLog.log.error("General Exception thrown", e);
 		}
@@ -153,7 +169,8 @@ public class JFCReplayer {
 	private void printInfo() {
 		GUITARLog.log.info("Testcase: " + JFCReplayerConfiguration.TESTCASE);
 		GUITARLog.log.info("Log file: " + JFCReplayerConfiguration.LOG_FILE);
-		GUITARLog.log.info("GUI state file: " + JFCReplayerConfiguration.GUI_STATE_FILE);
+		GUITARLog.log.info("GUI state file: "
+				+ JFCReplayerConfiguration.GUI_STATE_FILE);
 	}
 
 	/**
@@ -188,6 +205,17 @@ public class JFCReplayer {
 
 		if (JFCReplayerConfiguration.TESTCASE == null) {
 			System.err.println("missing '-t' argument");
+			isPrintUsage = true;
+		}
+
+		boolean isNotMeasureCoverage = JFCReplayerConfiguration.COVERAGE_DIR == null
+				&& JFCReplayerConfiguration.COVERAGE_CLEAN_FILE == null;
+		boolean isMeasureCoverage = JFCReplayerConfiguration.COVERAGE_DIR != null
+				&& JFCReplayerConfiguration.COVERAGE_CLEAN_FILE != null;
+
+		if (!isMeasureCoverage && !isNotMeasureCoverage) {
+			System.err
+					.println("'-cd,-cc' should be either all set or all unset");
 			isPrintUsage = true;
 		}
 

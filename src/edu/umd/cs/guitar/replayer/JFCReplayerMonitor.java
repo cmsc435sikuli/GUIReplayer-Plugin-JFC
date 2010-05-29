@@ -26,6 +26,8 @@ import java.net.MalformedURLException;
 import java.security.Permission;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import edu.umd.cs.guitar.event.GEvent;
 import edu.umd.cs.guitar.exception.ApplicationConnectException;
@@ -76,6 +78,11 @@ public class JFCReplayerMonitor extends GReplayerMonitor {
 	 * 
 	 */
 	private static class ExitTrappedException extends SecurityException {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 	}
 
 	SecurityManager oldSecurityManager;
@@ -266,7 +273,12 @@ public class JFCReplayerMonitor extends GReplayerMonitor {
 
 		GWindow gWindow = new JFCXWindow(parent);
 
-		if (sWindowID.equals(gWindow.getTitle())) {
+		String title = gWindow.getTitle();
+		if (title==null)
+			return null;
+
+//		if (sWindowID.equals(title )) {
+		if (isRegMatched(title, sWindowID)) {
 			return parent;
 		}
 
@@ -291,9 +303,9 @@ public class JFCReplayerMonitor extends GReplayerMonitor {
 	public void connectToApplication() {
 		try {
 			// application = new JFCApplication(MAIN_CLASS, INITIAL_DELAY);
-			
+
 			GUITARLog.log.info("Loading URL....");
-			
+
 			String[] URLs;
 			if (JFCReplayerConfiguration.URL_LIST != null)
 				URLs = JFCReplayerConfiguration.URL_LIST
@@ -313,7 +325,7 @@ public class JFCReplayerMonitor extends GReplayerMonitor {
 				args = new String[0];
 
 			GUITARLog.log.info("Loading URL.... DONE");
-			
+
 			application.connect(args);
 
 			GUITARLog.log.info("Initial waiting for "
@@ -333,6 +345,29 @@ public class JFCReplayerMonitor extends GReplayerMonitor {
 			throw new ApplicationConnectException();
 		}
 
+	}
+
+	/**
+	 * Check if a string is match by a regular expression temporarily used for
+	 * matching window titles. Should move to some more general modules for
+	 * future use.
+	 * 
+	 * <p>
+	 * 
+	 * @param input
+	 * @param regExp
+	 * @return
+	 */
+	private boolean isRegMatched(String input, String regExp) {
+
+		Pattern pattern;
+		Matcher matcher;
+		pattern = Pattern.compile(regExp);
+		matcher = pattern.matcher(input);
+		if (matcher.matches())
+			return true;
+
+		return false;
 	}
 
 }
