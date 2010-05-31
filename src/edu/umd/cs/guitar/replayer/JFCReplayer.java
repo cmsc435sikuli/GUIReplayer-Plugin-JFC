@@ -68,15 +68,15 @@ public class JFCReplayer {
 		checkArgs();
 		setupEnv();
 
-		System.setProperty("file.name", JFCReplayerConfiguration.LOG_FILE);
-		// PropertyConfigurator.configure(JFCConstants.LOG4J_PROPERTIES_FILE);
-
-		URL logFile = this.getClass().getClassLoader().getResource(
-				JFCConstants.LOG4J_PROPERTIES_FILE);
-		PropertyConfigurator.configure(logFile);
-
-		GUITARLog.log = Logger.getLogger(JFCReplayerMain.class.getSimpleName());
-		// GUITARLog.log.setLevel(Level.OFF);
+		System.setProperty("logfile.name", JFCReplayerConfiguration.LOG_FILE);
+//		// PropertyConfigurator.configure(JFCConstants.LOG4J_PROPERTIES_FILE);
+//
+//		URL logFile = this.getClass().getClassLoader().getResource(
+//				JFCConstants.LOG4J_PROPERTIES_FILE);
+//		PropertyConfigurator.configure(logFile);
+//
+//		GUITARLog.log = Logger.getLogger(JFCReplayerMain.class.getSimpleName());
+//		// GUITARLog.log.setLevel(Level.OFF);
 		printInfo();
 
 		TestCase tc = (TestCase) IO.readObjFromFile(
