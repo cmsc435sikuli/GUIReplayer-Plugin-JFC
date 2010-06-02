@@ -29,6 +29,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.netbeans.jemmy.EventTool;
+
 import edu.umd.cs.guitar.event.GEvent;
 import edu.umd.cs.guitar.exception.ApplicationConnectException;
 import edu.umd.cs.guitar.model.GComponent;
@@ -192,12 +194,12 @@ public class JFCReplayerMonitor extends GReplayerMonitor {
 
 			retGXComponent = gWindow.getFirstChildByID(sComponentID);
 
-			try {
-				Thread.sleep(DELAY_STEP);
-			} catch (InterruptedException e) {
-				GUITARLog.log.error(e);
-			}
-
+//			try {
+//				Thread.sleep(DELAY_STEP);
+//			} catch (InterruptedException e) {
+//				GUITARLog.log.error(e);
+//			}
+			new EventTool().waitNoEvent(DELAY_STEP);
 		}
 		return retGXComponent;
 	}
@@ -226,11 +228,13 @@ public class JFCReplayerMonitor extends GReplayerMonitor {
 					break;
 				}
 			}
-			try {
-				Thread.sleep(DELAY_STEP);
-			} catch (InterruptedException e) {
-				GUITARLog.log.error(e);
-			}
+//			try {
+//				Thread.sleep(DELAY_STEP);
+//			} catch (InterruptedException e) {
+//				GUITARLog.log.error(e);
+//			}
+			
+			new EventTool().waitNoEvent(DELAY_STEP);
 		}
 		return retGXWindow;
 	}

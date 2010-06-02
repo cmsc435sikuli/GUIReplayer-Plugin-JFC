@@ -68,7 +68,7 @@ public class JFCReplayer {
 		checkArgs();
 		setupEnv();
 
-		System.setProperty("logfile.name", JFCReplayerConfiguration.LOG_FILE);
+		System.setProperty(GUITARLog.LOGFILE_NAME_SYSTEM_PROPERTY, JFCReplayerConfiguration.LOG_FILE);
 //		// PropertyConfigurator.configure(JFCConstants.LOG4J_PROPERTIES_FILE);
 //
 //		URL logFile = this.getClass().getClassLoader().getResource(
