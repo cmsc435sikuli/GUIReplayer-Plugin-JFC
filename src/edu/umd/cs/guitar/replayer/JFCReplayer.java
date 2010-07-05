@@ -128,6 +128,9 @@ public class JFCReplayer {
 			// GTestMonitor debugMonitor = new JFCDebugMonitor();
 			// replayer.addTestMonitor(debugMonitor);
 
+			// Set up string comparator
+			jMonitor.setUseReg(JFCReplayerConfiguration.REG_USED);
+			
 			replayer.setMonitor(jMonitor);
 			replayer.setTimeOut(JFCReplayerConfiguration.TESTCASE_TIMEOUT);
 
@@ -207,6 +210,8 @@ public class JFCReplayer {
 			System.err.println("missing '-t' argument");
 			isPrintUsage = true;
 		}
+		
+		
 
 		boolean isNotMeasureCoverage = JFCReplayerConfiguration.COVERAGE_DIR == null
 				&& JFCReplayerConfiguration.COVERAGE_CLEAN_FILE == null;

@@ -59,6 +59,9 @@ public class JFCReplayerMonitor extends GReplayerMonitor {
      */
 	private static final int INITIAL_DELAY = 1000;
 	String MAIN_CLASS;
+	
+	
+	
 
 	/**
 	 * Delay for widget searching loop
@@ -282,8 +285,15 @@ public class JFCReplayerMonitor extends GReplayerMonitor {
 			return null;
 
 //		if (sWindowID.equals(title )) {
-		if (isRegMatched(title, sWindowID)) {
-			return parent;
+
+		if (isUseReg) {
+			if (isRegMatched(title, sWindowID)) {
+				return parent;
+			}
+		} else {
+			if ( sWindowID.equals(title)) {
+				return parent;
+			}
 		}
 
 		Window retWin = null;
@@ -297,6 +307,7 @@ public class JFCReplayerMonitor extends GReplayerMonitor {
 		return retWin;
 
 	}
+
 
 	/*
 	 * (non-Javadoc)

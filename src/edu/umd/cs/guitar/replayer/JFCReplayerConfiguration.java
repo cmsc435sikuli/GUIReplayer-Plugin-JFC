@@ -83,6 +83,9 @@ public class JFCReplayerConfiguration extends GReplayerConfiguration {
 
 	@Option(name = "-p", usage = "Pause after each step", aliases = "--pause")
 	static boolean PAUSE = false;
+	
+	@Option(name = "-r", usage = "Compare string using regular expression", aliases = "--regular-expression")
+	static boolean REG_USED= false;
 
 	// Cobertura Coverage collection
 	@Option(name = "-cd", usage = "Cobertura coverage output dir", aliases = "--coverage-dir")
