@@ -182,30 +182,30 @@ public class JFCReplayerMonitor extends GReplayerMonitor {
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * edu.umd.cs.guitar.replayer.AbsReplayerMonitor#getComponent(java.lang.
-	 * String, edu.umd.cs.guitar.model.GXWindow)
-	 */
-	@Override
-	public GComponent getComponent(String sComponentID, GWindow gWindow) {
-		GComponent retGXComponent = null;
-
-		while (retGXComponent == null) {
-
-			retGXComponent = gWindow.getFirstChildByID(sComponentID);
-
-//			try {
-//				Thread.sleep(DELAY_STEP);
-//			} catch (InterruptedException e) {
-//				GUITARLog.log.error(e);
-//			}
-			new EventTool().waitNoEvent(DELAY_STEP);
-		}
-		return retGXComponent;
-	}
+//	/*
+//	 * (non-Javadoc)
+//	 * 
+//	 * @see
+//	 * edu.umd.cs.guitar.replayer.AbsReplayerMonitor#getComponent(java.lang.
+//	 * String, edu.umd.cs.guitar.model.GXWindow)
+//	 */
+//	@Override
+//	public GComponent getComponent(String sComponentID, GWindow gWindow) {
+//		GComponent retGXComponent = null;
+//
+//		while (retGXComponent == null) {
+//
+//			retGXComponent = gWindow.getFirstChildByID(sComponentID);
+//
+////			try {
+////				Thread.sleep(DELAY_STEP);
+////			} catch (InterruptedException e) {
+////				GUITARLog.log.error(e);
+////			}
+//			new EventTool().waitNoEvent(DELAY_STEP);
+//		}
+//		return retGXComponent;
+//	}
 
 	/*
 	 * (non-Javadoc)
@@ -214,7 +214,7 @@ public class JFCReplayerMonitor extends GReplayerMonitor {
 	 * edu.umd.cs.guitar.replayer.AbsReplayerMonitor#getWindow(java.lang.String)
 	 */
 	@Override
-	public GWindow getWindow(String sWindowID) {
+	public GWindow getWindow(String sWindowTitle) {
 
 		GWindow retGXWindow = null;
 		while (retGXWindow == null) {
@@ -225,7 +225,7 @@ public class JFCReplayerMonitor extends GReplayerMonitor {
 				continue;
 
 			for (Frame aWindow : windows) {
-				Window window = getOwnedWindowByID(aWindow, sWindowID);
+				Window window = getOwnedWindowByID(aWindow, sWindowTitle);
 				if (window != null) {
 					retGXWindow = new JFCXWindow(window);
 					break;
