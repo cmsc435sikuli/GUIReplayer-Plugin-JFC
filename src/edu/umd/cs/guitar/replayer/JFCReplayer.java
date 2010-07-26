@@ -37,9 +37,11 @@ import org.kohsuke.args4j.CmdLineException;
 import org.xml.sax.SAXException;
 
 import edu.umd.cs.guitar.exception.GException;
+import edu.umd.cs.guitar.model.GHashcodeGenerator;
 import edu.umd.cs.guitar.model.GUITARConstants;
 import edu.umd.cs.guitar.model.IO;
 import edu.umd.cs.guitar.model.JFCConstants;
+import edu.umd.cs.guitar.model.JFCDefaultHashcodeGenerator;
 import edu.umd.cs.guitar.model.data.AttributesType;
 import edu.umd.cs.guitar.model.data.ComponentListType;
 import edu.umd.cs.guitar.model.data.ComponentType;
@@ -96,9 +98,18 @@ public class JFCReplayer {
 					JFCReplayerConfiguration.MAIN_CLASS);
 
 			// Add a GUI state record monitor
+			GHashcodeGenerator jHashcodeGenerator = JFCDefaultHashcodeGenerator.getInstance();
+			
 			GTestMonitor stateMonitor = new StateMonitorFull(
+					jHashcodeGenerator,
 					JFCReplayerConfiguration.GUI_STATE_FILE,
-					JFCReplayerConfiguration.DELAY);
+					JFCReplayerConfiguration.DELAY );
+			
+//			GTestMonitor stateMonitor = new StateMonitorFull(
+//					JFCReplayerConfiguration.GUI_STATE_FILE,
+//					JFCReplayerConfiguration.DELAY);
+//			
+			
 			replayer.addTestMonitor(stateMonitor);
 
 			// Add a pause monitor and ignore time out monitor if needed
