@@ -31,7 +31,9 @@ import java.util.regex.Pattern;
 
 import org.netbeans.jemmy.EventTool;
 
+import edu.umd.cs.guitar.event.EventManager;
 import edu.umd.cs.guitar.event.GEvent;
+import edu.umd.cs.guitar.event.JFCEventHandler;
 import edu.umd.cs.guitar.exception.ApplicationConnectException;
 import edu.umd.cs.guitar.model.GComponent;
 import edu.umd.cs.guitar.model.GUITARConstants;
@@ -59,9 +61,6 @@ public class JFCReplayerMonitor extends GReplayerMonitor {
      */
 	private static final int INITIAL_DELAY = 1000;
 	String MAIN_CLASS;
-	
-	
-	
 
 	/**
 	 * Delay for widget searching loop
@@ -134,6 +133,13 @@ public class JFCReplayerMonitor extends GReplayerMonitor {
 		};
 		System.setSecurityManager(securityManager);
 
+		// Registering default supported events
+		EventManager em = EventManager.getInstance();
+
+		for (Class<? extends JFCEventHandler> event : JFCConstants.DEFAULT_SUPPORTED_EVENTS) {
+			em.registerEvent(event);
+		}
+
 	}
 
 	/*
@@ -182,30 +188,30 @@ public class JFCReplayerMonitor extends GReplayerMonitor {
 		return null;
 	}
 
-//	/*
-//	 * (non-Javadoc)
-//	 * 
-//	 * @see
-//	 * edu.umd.cs.guitar.replayer.AbsReplayerMonitor#getComponent(java.lang.
-//	 * String, edu.umd.cs.guitar.model.GXWindow)
-//	 */
-//	@Override
-//	public GComponent getComponent(String sComponentID, GWindow gWindow) {
-//		GComponent retGXComponent = null;
-//
-//		while (retGXComponent == null) {
-//
-//			retGXComponent = gWindow.getFirstChildByID(sComponentID);
-//
-////			try {
-////				Thread.sleep(DELAY_STEP);
-////			} catch (InterruptedException e) {
-////				GUITARLog.log.error(e);
-////			}
-//			new EventTool().waitNoEvent(DELAY_STEP);
-//		}
-//		return retGXComponent;
-//	}
+	// /*
+	// * (non-Javadoc)
+	// *
+	// * @see
+	// * edu.umd.cs.guitar.replayer.AbsReplayerMonitor#getComponent(java.lang.
+	// * String, edu.umd.cs.guitar.model.GXWindow)
+	// */
+	// @Override
+	// public GComponent getComponent(String sComponentID, GWindow gWindow) {
+	// GComponent retGXComponent = null;
+	//
+	// while (retGXComponent == null) {
+	//
+	// retGXComponent = gWindow.getFirstChildByID(sComponentID);
+	//
+	// // try {
+	// // Thread.sleep(DELAY_STEP);
+	// // } catch (InterruptedException e) {
+	// // GUITARLog.log.error(e);
+	// // }
+	// new EventTool().waitNoEvent(DELAY_STEP);
+	// }
+	// return retGXComponent;
+	// }
 
 	/*
 	 * (non-Javadoc)
@@ -231,12 +237,12 @@ public class JFCReplayerMonitor extends GReplayerMonitor {
 					break;
 				}
 			}
-//			try {
-//				Thread.sleep(DELAY_STEP);
-//			} catch (InterruptedException e) {
-//				GUITARLog.log.error(e);
-//			}
-			
+			// try {
+			// Thread.sleep(DELAY_STEP);
+			// } catch (InterruptedException e) {
+			// GUITARLog.log.error(e);
+			// }
+
 			new EventTool().waitNoEvent(DELAY_STEP);
 		}
 		return retGXWindow;
@@ -281,17 +287,17 @@ public class JFCReplayerMonitor extends GReplayerMonitor {
 		GWindow gWindow = new JFCXWindow(parent);
 
 		String title = gWindow.getTitle();
-		if (title==null)
+		if (title == null)
 			return null;
 
-//		if (sWindowID.equals(title )) {
+		// if (sWindowID.equals(title )) {
 
 		if (isUseReg) {
 			if (isRegMatched(title, sWindowID)) {
 				return parent;
 			}
 		} else {
-			if ( sWindowID.equals(title)) {
+			if (sWindowID.equals(title)) {
 				return parent;
 			}
 		}
@@ -307,7 +313,6 @@ public class JFCReplayerMonitor extends GReplayerMonitor {
 		return retWin;
 
 	}
-
 
 	/*
 	 * (non-Javadoc)
