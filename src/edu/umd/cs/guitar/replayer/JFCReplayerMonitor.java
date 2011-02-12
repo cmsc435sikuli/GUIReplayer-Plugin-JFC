@@ -56,23 +56,19 @@ import edu.umd.cs.guitar.replayer.GReplayerMonitor;
  */
 public class JFCReplayerMonitor extends GReplayerMonitor {
 
-	/**
-     * 
-     */
 	private static final int INITIAL_DELAY = 1000;
 	String MAIN_CLASS;
+
+	private JFCReplayerConfiguration config;
 
 	/**
 	 * Delay for widget searching loop
 	 */
 	private static final int DELAY_STEP = 50;
 
-	/**
-	 * @param main_class
-	 */
-	public JFCReplayerMonitor(String main_class) {
-		super();
-		MAIN_CLASS = main_class;
+	public JFCReplayerMonitor(GReplayerConfiguration config) {
+		this.config = (JFCReplayerConfiguration) config;
+		MAIN_CLASS = this.config.MAIN_CLASS;
 	}
 
 	/**
@@ -82,10 +78,6 @@ public class JFCReplayerMonitor extends GReplayerMonitor {
 	 * 
 	 */
 	private static class ExitTrappedException extends SecurityException {
-
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = 1L;
 	}
 
@@ -187,31 +179,6 @@ public class JFCReplayerMonitor extends GReplayerMonitor {
 		// return event.getParameters();
 		return null;
 	}
-
-	// /*
-	// * (non-Javadoc)
-	// *
-	// * @see
-	// * edu.umd.cs.guitar.replayer.AbsReplayerMonitor#getComponent(java.lang.
-	// * String, edu.umd.cs.guitar.model.GXWindow)
-	// */
-	// @Override
-	// public GComponent getComponent(String sComponentID, GWindow gWindow) {
-	// GComponent retGXComponent = null;
-	//
-	// while (retGXComponent == null) {
-	//
-	// retGXComponent = gWindow.getFirstChildByID(sComponentID);
-	//
-	// // try {
-	// // Thread.sleep(DELAY_STEP);
-	// // } catch (InterruptedException e) {
-	// // GUITARLog.log.error(e);
-	// // }
-	// new EventTool().waitNoEvent(DELAY_STEP);
-	// }
-	// return retGXComponent;
-	// }
 
 	/*
 	 * (non-Javadoc)
@@ -322,24 +289,21 @@ public class JFCReplayerMonitor extends GReplayerMonitor {
 	@Override
 	public void connectToApplication() {
 		try {
-			// application = new JFCApplication(MAIN_CLASS, INITIAL_DELAY);
-
 			GUITARLog.log.info("Loading URL....");
 
 			String[] URLs;
-			if (JFCReplayerConfiguration.URL_LIST != null)
-				URLs = JFCReplayerConfiguration.URL_LIST
+			if (config.URL_LIST != null)
+				URLs = config.URL_LIST
 						.split(GUITARConstants.CMD_ARGUMENT_SEPARATOR);
 			else
 				URLs = new String[0];
 
-			application = new JFCApplication(
-					JFCReplayerConfiguration.MAIN_CLASS, URLs);
+			application = new JFCApplication(config.MAIN_CLASS, URLs);
 
 			String[] args;
 
-			if (JFCReplayerConfiguration.ARGUMENT_LIST != null)
-				args = JFCReplayerConfiguration.ARGUMENT_LIST
+			if (config.ARGUMENT_LIST != null)
+				args = config.ARGUMENT_LIST
 						.split(GUITARConstants.CMD_ARGUMENT_SEPARATOR);
 			else
 				args = new String[0];
@@ -349,10 +313,10 @@ public class JFCReplayerMonitor extends GReplayerMonitor {
 			application.connect(args);
 
 			GUITARLog.log.info("Initial waiting for "
-					+ JFCReplayerConfiguration.INITIAL_WAITING_TIME + "ms");
+					+ config.INITIAL_WAITING_TIME + "ms");
 
 			try {
-				Thread.sleep(JFCReplayerConfiguration.INITIAL_WAITING_TIME);
+				Thread.sleep(config.INITIAL_WAITING_TIME);
 			} catch (InterruptedException e) {
 				GUITARLog.log.error(e);
 				throw new ApplicationConnectException();

@@ -57,12 +57,26 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
   </path>
 
   <path id="classpath">
-    <fileset file="${args4j}" />
+    <fileset file="${apache-cli}" />
     <fileset file="${log4j}" />
     <fileset file="${jemmy}" />
     <fileset file="${cobertura}" />
   </path>
 
   <import file="../../shared/ant/default.xml" />
+
+  <target name="build" depends="common.build">
+    <exec executable="python" dir="${root.dir}">
+      <arg value="-c" />
+      <arg value="from guitar import ui; ui('greplayer-cache.txt').install('jfc', 'Java Foundation Classes plugin', 'edu.umd.cs.guitar.replayer.JFCPluginInfo', ['${log4j}', '${apache-cli}', '${jemmy}', '${cobertura}', 'jars/GUITARModel-Plugin-JFC.jar', 'jars/GUITARModel-Core.jar', 'jars/GUIReplayer-Plugin-JFC.jar', 'jars/GUIReplayer-Core.jar'])" />
+    </exec>
+  </target>
+
+  <target name="instrument" depends="common.instrument">
+    <exec executable="python" dir="${root.dir}">
+      <arg value="-c" />
+      <arg value="from guitar import ui; ui('greplayer-cache.txt').install('jfc', 'Java Foundation Classes plugin', 'edu.umd.cs.guitar.ripper.JFCPluginInfo', ['${log4j}', '${apache-cli}', '${jemmy}', '${cobertura}', 'jars/GUITARModel-Plugin-JFC.jar', 'jars/GUITARModel-Core.jar', 'jars/GUIReplayer-Plugin-JFC.jar', 'jars/GUIReplayer-Core.jar', '${cobertura}'], [('net.sourceforge.cobertura.datafile', 'cobertura.ser')])" />
+    </exec>
+  </target>
 
 </project>
