@@ -44,16 +44,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
-<project name="GUIReplayer-Plugin-Sikuli" basedir=".." default="help">
+<project name="GUIReplayer-Plugin-JFC" basedir=".." default="help">
 
-  <property name="module" value="GUIReplayer-Plugin-Sikuli" />
+  <property name="module" value="GUIReplayer-Plugin-JFC" />
   <import file="../../shared/ant/properties.xml" />
 
   <property name="dependency_list"
-            value="GUITARModel-Plugin-Sikuli,GUIReplayer-Core-Sikuli" />
+            value="GUITARModel-Plugin-JFC,GUIReplayer-Core" />
   <path id="dependency_list.buildfiles">
-    <fileset file="${root.dir}/GUITARModel-Plugin-Sikuli/install/build.xml" />
-    <fileset file="${root.dir}/GUIReplayer-Core-Sikuli/install/build.xml" />
+    <fileset file="${root.dir}/GUITARModel-Plugin-JFC/install/build.xml" />
+    <fileset file="${root.dir}/GUIReplayer-Core/install/build.xml" />
   </path>
 
   <path id="classpath">
