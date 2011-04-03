@@ -294,7 +294,8 @@ public class JFCReplayerMonitor extends GReplayerMonitor {
 			String[] URLs;
 			if (config.URL_LIST != null)
 				URLs = config.URL_LIST
-						.split(GUITARConstants.CMD_ARGUMENT_SEPARATOR);
+						//.split(GUITARConstants.CMD_ARGUMENT_SEPARATOR);
+						.split(",");
 			else
 				URLs = new String[0];
 
